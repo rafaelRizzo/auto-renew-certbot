@@ -39,7 +39,7 @@ while IFS= read -r DOMAIN; do
     # Verifique se o certificado está próximo de expirar
     if [ "$DAYS_LEFT" -le "$ALERT_DAYS" ]; then
         echo "$(date): O certificado SSL para $DOMAIN expira em $DAYS_LEFT dias. Executando 'certbot renew'." | tee -a "$LOG_FILE"
-        certbot renew --domain "$DOMAIN" >> "$LOG_FILE" 2>&1
+        certbot renew --cert-name "$DOMAIN" >> "$LOG_FILE" 2>&1
     else
         echo "$(date): O certificado SSL para $DOMAIN está válido por mais $DAYS_LEFT dias." | tee -a "$LOG_FILE"
     fi
