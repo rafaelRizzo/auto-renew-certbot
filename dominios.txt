@@ -1,1 +1,3 @@
 # Coloque aqui os dominios que deseja verificar
+
+#
