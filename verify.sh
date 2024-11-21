@@ -13,10 +13,14 @@ fi
 
 # Leia os domínios do arquivo e verifique cada um
 while IFS= read -r DOMAIN; do
-    # Pule linhas em branco ou iniciadas com "#"
-    if [[ -z "$DOMAIN" || "$DOMAIN" =~ ^# ]]; then
-        continue
-    fi
+    # remover comentários
+    if [[ -n "$DOMAIN" && ${DOMAIN:0:1} == "#" ]]; then continue; fi
+
+    # remover comentários inline
+    DOMAIN=$(echo "$DOMAIN" | sed -E 's/([^\\])#.*$/\1/' | sed 's/[[:space:]]*$//')
+
+    # preservar comentários escapados
+    DOMAIN=$(echo "$DOMAIN" | sed 's/\\#/#/g')
 
     # Obtenha a data de validade do certificado SSL
     EXPIRATION_DATE=$(echo | openssl s_client -servername "$DOMAIN" -connect "$DOMAIN:443" 2>/dev/null | openssl x509 -noout -enddate | cut -d= -f2)
