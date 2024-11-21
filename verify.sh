@@ -44,4 +44,4 @@ while IFS= read -r DOMAIN; do
         echo "$(date): O certificado SSL para $DOMAIN está válido por mais $DAYS_LEFT dias." | tee -a "$LOG_FILE"
     fi
 
-done < "$DOMAINS_FILE"
+done < <(cat $DOMAINS_FILE; printf '\n')
