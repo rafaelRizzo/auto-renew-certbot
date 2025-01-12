@@ -1,63 +1,66 @@
 # Verificador e Renovador de Certificados SSL
 
-Este script foi criado para facilitar a gestão de certificados SSL em servidores que hospedam múltiplos domínios. Ele verifica a validade dos certificados, registra logs detalhados, e, caso necessário, renova os certificados automaticamente usando o Certbot.
+## 💡 Por que e para que?
+Este projeto foi criado para simplificar e automatizar a gestão de certificados SSL em servidores que hospedam múltiplos domínios. Certificados SSL são essenciais para garantir a segurança e confiabilidade de sites, mas a renovação manual pode ser trabalhosa e propensa a erros. Com este script, você pode:
 
-## Pré-requisitos
-Certbot instalado no servidor, para sistemas baseados em Fedora:
+- Monitorar a validade dos certificados de forma centralizada.
+- Automatizar a renovação de certificados próximos de expirar.
+- Registrar logs detalhados para facilitar auditorias e resolver problemas rapidamente.
+- Evitar interrupções causadas por certificados expirados.
 
-`sudo apt install certbot`
+## ⚙️ Como funciona?
+### 1. Lista de domínios.
+O script usa um arquivo chamado domains.txt para armazenar a lista de domínios a serem monitorados. Cada domínio deve estar em uma linha separada.
 
-Permissões adequadas para acessar e modificar os arquivos de log.
-
-# Como funciona o script
-### *1. Lista de domínios* 
-
-O script utiliza um arquivo de texto (dominios.txt) onde você lista os domínios que deseja monitorar.
-
-Exemplo do arquivo dominios.txt:
+Exemplo do arquivo domains.txt:
 
 ```
-seusite.com
-outrosite.com
-exemplosite.com
+example.com
+mywebsite.com
+anotherdomain.net
 ```
 
-### *2. Verificação e Renovação*
+### 2. Verificação e Renovação
+O script realiza as seguintes etapas para cada domínio listado:
 
-Para cada domínio na lista:
-Verifica a validade do certificado SSL.
+Verifica a data de expiração do certificado SSL.
+Caso o certificado esteja próximo de expirar (≤ 7 dias), executa o comando certbot renew para renovar o certificado.
+Registra no log o status da operação, incluindo erros, se houver.
+### 3. Logs
+Todas as ações realizadas pelo script são registradas em um arquivo de log e inclui:
 
-Se o certificado estiver próximo de expirar (≤ 7 dias), executa:
- `certbot renew --domain "dominio"`
+- Data e hora das verificações.
+- Resultados das verificações (ex.: certificado válido, renovação necessária, erros).
+- Caminho padrão do log: /var/log/ssl_check.log.
 
-Caso contrário, registra que o certificado ainda é válido.
+### 4. Automatização
+Para garantir que o script seja executado automaticamente, configure uma tarefa Cron que o execute diariamente.
 
-### *3. Logs*
+Exemplo de configuração do Cron:
 
-Todos os resultados (verificações e renovações) são registrados em um arquivo de log centralizado:
-Caminho padrão: /var/log/ssl_check.log.
-Inclui mensagens de erro caso algo dê errado, como problemas ao acessar o certificado de um domínio.
-Automatização
-Para garantir que o script rode automaticamente e monitore os domínios diariamente, configure uma tarefa no Cron:
+```
+crontab -e
+```
+Adicione a seguinte linha para rodar o script todos os dias às 3h:
 
-### *4. Edite o Cron:*
+```
+0 3 * * * /caminho/para/seu/script.js
+```
+Certifique-se de que o script tem permissão de execução:
 
-```crontab -e```
-Adicione uma entrada para rodar o script diariamente às 9h:
+`chmod +x /caminho/para/seu/script.js`
 
-```0 9 * * * /caminho/para/seu/verify.sh```
+## ✨ Benefícios do Script
+- Praticidade: Automatiza o monitoramento e renovação de certificados.
+- Segurança: Evita interrupções causadas por certificados expirados.
+- Eficiência: Gera logs detalhados para fácil auditoria.
+- Escalabilidade: Suporte para múltiplos domínios sem necessidade de configuração adicional.
 
-Nota: Certifique-se de que o script possui permissões de execução:
+## 🌐 Contribuindo
+Caso tenha sugestões ou encontre problemas, sinta-se à vontade para abrir uma issue ou enviar um pull request. Suas contribuições são muito bem-vindas!
 
-```chmod +x /caminho/para/seu/verify.sh```
+## 🪪 Licença
+Este projeto é licenciado sob a Licença MIT - veja o arquivo LICENSE para mais detalhes.
 
-## Benefícios do Script
-
-Gestão simples: Monitore múltiplos domínios de uma única vez.
-Automação eficiente: Renova automaticamente certificados próximos de expirar.
-Centralização de logs: Mantém um histórico detalhado das verificações e ações realizadas.
-Resiliência: Identifica e registra erros caso algum domínio não esteja acessível.
-
-### Contribuindo
-
-Sinta-se à vontade para sugerir melhorias ou relatar problemas abrindo uma issue. Qualquer contribuição é bem-vinda!
+## ☕ Donate 
+Caso queira contribuir com para mim com um café, pode fazer uma doação através do PIX: `a1006c68-e9df-44e1-bfab-fa1dfe7047ce`
