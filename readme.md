@@ -44,11 +44,11 @@ crontab -e
 Adicione a seguinte linha para rodar o script todos os dias às 3h:
 
 ```
-0 3 * * * /caminho/para/seu/script.js
+0 3 * * * /caminho/para/seu/verify.sh
 ```
 Certifique-se de que o script tem permissão de execução:
 
-`chmod +x /caminho/para/seu/script.js`
+`chmod +x /caminho/para/seu/verify.sh`
 
 ## ✨ Benefícios do Script
 - Praticidade: Automatiza o monitoramento e renovação de certificados.
